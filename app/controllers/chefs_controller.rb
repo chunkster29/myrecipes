@@ -15,7 +15,7 @@ class ChefsController < ApplicationController
   def create
     @chef = Chef.new(chef_params)
     if @chef.save
-      session[:chef_id] = @chef_id
+      session[:chef_id] = @chef.id
       flash[:success] = "Welcome #{@chef.chefname} to MyRecipes App!"
       redirect_to chef_path(@chef)
     else
@@ -59,7 +59,7 @@ class ChefsController < ApplicationController
   end
   
   def require_same_user
-    if current_chef != @chef and current_chef.admin?
+    if current_chef != @chef and !current_chef.admin?
       flash[:danger] = "You can only edit or delete your own account"
       redirect_to chefs_path
     end
